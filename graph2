@@ -45,19 +45,12 @@ max(ratio)
 ## Including Plots
 
 ```{r}
-bag <- ggplot(tf, aes(factor(Bags_Under_Eyes), Attractive, fill = Bags_Under_Eyes))
-bag + 
-  stat_summary(fun.y = mean, geom = "bar", position = "dodge") +
-  stat_summary(fun.receiversNonZero = mean_cl_normal, geom = "errorbar", 
-               position = position_dodge(width = 0.90),
-               width = .5) +
-  stat_compare_means(label = "p.signif", 
-                     method = "wilcox.test",label.y = 3.2)+
-  cleanup+
-  xlab("bagged_eyes")+
-  ylab("attractive")+
-  scale_x_discrete()+
-  geom_point(position = position_jitter())+
-  scale_fill_discrete(name = "bag")
+```{r}
+bag <- aggregate(df$Attractive,
+                 by = list(bag_ue = factor(df$Bags_Under_Eyes)),
+                 FUN = function(x) c(sum = sum(x), sd = sd(x),
+                                     n = length(x)))
+bagged <- ggplot(data = df, aes(x = factor(bag_ue), y = sum,
+                                        fill = factor(bag_ue)))
 ggsave("bagged_eyes.png")
 ```
