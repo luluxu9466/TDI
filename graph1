@@ -45,6 +45,5 @@ max(ratio)
 # Bar plot of all traits
 ```{r}
 barplot(ratio)
-
-ggsave("bar")
+ggsave("all.png")
 ```
