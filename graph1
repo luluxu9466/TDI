@@ -1,0 +1,50 @@
+---
+title: "TDI project proposal"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(robustbase)
+library(plyr)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+
+library(ggplot2)
+library(ggExtra)
+
+library(knitr)
+
+library(ggpubr)
+
+library(stargazer)
+
+library(AER)
+
+library(corrplot)
+
+cleanup = theme(panel.grid.major = element_blank(),
+                panel.grid.minor = element_blank(),
+                panel.background = element_blank(),
+                axis.line = element_line(color = "black"))
+```
+
+```{r celebrity data}
+df <-  read_csv("/Users/fangyixu/Desktop/TDI/celeba-dataset/list_attr_celeba.csv")
+nrow(df)
+count(df, Male)
+ratio = colSums(df[,-1]) / nrow(df)
+tf <- t(df)
+tf$r <- t(ratio)
+ratio
+max(ratio)
+```
+
+# Bar plot of all traits
+```{r}
+barplot(ratio)
+
+ggsave("bar")
+```
