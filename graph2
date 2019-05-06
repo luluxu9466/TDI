@@ -1,0 +1,63 @@
+---
+title: "TDI project proposal"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(robustbase)
+library(plyr)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+
+library(ggplot2)
+library(ggExtra)
+
+library(knitr)
+
+library(ggpubr)
+
+library(stargazer)
+
+library(AER)
+
+library(corrplot)
+
+cleanup = theme(panel.grid.major = element_blank(),
+                panel.grid.minor = element_blank(),
+                panel.background = element_blank(),
+                axis.line = element_line(color = "black"))
+```
+
+```{r celebrity data}
+df <-  read_csv("/Users/fangyixu/Desktop/TDI/celeba-dataset/list_attr_celeba.csv")
+nrow(df)
+count(df, Male)
+ratio = colSums(df[,-1]) / nrow(df)
+tf <- t(df)
+tf$r <- t(ratio)
+ratio
+max(ratio)
+```
+
+## Including Plots
+
+```{r}
+bag <- ggplot(tf, aes(factor(Bags_Under_Eyes), Attractive, fill = Bags_Under_Eyes))
+bag + 
+  stat_summary(fun.y = mean, geom = "bar", position = "dodge") +
+  stat_summary(fun.receiversNonZero = mean_cl_normal, geom = "errorbar", 
+               position = position_dodge(width = 0.90),
+               width = .5) +
+  stat_compare_means(label = "p.signif", 
+                     method = "wilcox.test",label.y = 3.2)+
+  cleanup+
+  xlab("bagged_eyes")+
+  ylab("attractive")+
+  scale_x_discrete()+
+  geom_point(position = position_jitter())+
+  scale_fill_discrete(name = "bag")
+ggsave("bagged_eyes.png")
+```
